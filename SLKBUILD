@@ -1,0 +1,55 @@
+#Packager: Dimitris Tzemos <dijemos~at~gmail~dot~com>
+
+pkgname=brave-browser
+pkgver=1.96.61
+pkgrel=1dj
+source=("https://github.com/brave/brave-browser/releases/download/v${pkgver}/brave-browser_${pkgver}_amd64.deb")
+url=https://brave.com/
+
+slackdesc=\
+(
+#|-----handy-ruler------------------------------------------------------|
+"brave-browser (a safer, faster, and better Web browsing experience)"
+"Brave is a free and open-source web browser developed by Brave"
+"Software, Inc. based on the Chromium web browser."
+""
+"https://brave-browser.com"
+)
+
+build() {
+	cd $startdir/src/
+	
+	#Abort build if architecture is not 64-bit.
+	if [ "$arch" != "x86_64" ]; then
+		echo "$ARCH is not supported."
+		exit 1
+	fi
+
+	ar x $pkgname"_"$pkgver"_"amd64.deb data.tar.xz || return 1
+	mkdir -p $pkgname-$pkgver || return 1
+	tar -xvf data.tar.xz -C $pkgname-$pkgver/ || return 1
+	rm data.tar.xz || return 1
+	cd $startdir/src/$pkgname-$pkgver/ || return 1
+	cp -apr * $startdir/pkg/  || return 1
+
+	# Slackware doesn't ship a GNOME desktop so I don't see any reason for gnome-control-center
+	rm -rf $startdir/pkg/usr/share/gnome-control-center || return 1
+
+	# move man pages into place
+	mv $startdir/pkg/usr/share/man $startdir/pkg/usr/man || return 1
+
+	# move icon into place
+	mkdir -p $startdir/pkg/usr/share/pixmaps || return 1
+	cp -a \
+	opt/brave.com/brave/product_logo_32.png \
+	$startdir/pkg/usr/share/pixmaps/brave-browser.png || return 1
+
+	mkdir -p $startdir/pkg/usr/doc/$pkgname-$pkgver
+	cp -a \
+	$startdir/pkg/opt/brave.com/brave/LICENSE \
+	$startdir/pkg/usr/doc/$pkgname-$pkgver/ || return 1
+
+	# put the doc folder contents in the right place
+	cp $startdir/pkg/usr/share/doc/$pkgname/* $startdir/pkg/usr/doc/$pkgname-$pkgver/ || return 1
+	rm -r $startdir/pkg/usr/share/doc || return 1
+} 
