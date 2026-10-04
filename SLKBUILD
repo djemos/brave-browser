@@ -13,7 +13,7 @@ slackdesc=\
 "Brave is a free and open-source web browser developed by Brave"
 "Software, Inc. based on the Chromium web browser."
 ""
-"https://brave-browser.com"
+"Homepage: https://github.com/brave/brave-browser"
 )
 
 build() {
