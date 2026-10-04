@@ -1,1 +1,17 @@
 #brave-browser
+"brave-browser (a safer, faster, and better Web browsing experience)"
+"Brave is a free and open-source web browser developed by Brave"
+"Software, Inc. based on the Chromium web browser."
+""
+"https://brave-browser.com"
+
+The SLKBUILD repackage the binary for slackware
+
+To build the package type
+
+git clone https://github.com/djemos/brave-browser
+cd brave-browser
+sudo slkbuild -X
+install it with
+sudo spkg brave-browser-1.96.61-x86_64-1dj.txz
+
